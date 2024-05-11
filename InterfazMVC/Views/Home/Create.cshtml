@@ -1,0 +1,101 @@
+﻿@model Datos.Tarea
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<a asp-action="Index" asp-controller="Home" class="btn btn-primary btn-sm">Volver</a>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card border-0 shadow-lg">
+            <div class="card-body">
+                <form asp-action="Create" onsubmit="return validacionGeneral()">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label>TITULO</label>
+                        <input asp-for="Titulo" id="Titulo" class="form-control" required />
+                <span asp-validation-for="Titulo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>DESCRIPCION</label>
+                <input asp-for="Descripcion" id="Descripcion" class="form-control" required />
+                <span asp-validation-for="Descripcion" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>FECHA CREACION</label>
+                <input asp-for="FechaCreacion" id="fechaCreacion" class="form-control" required />
+                <span asp-validation-for="FechaCreacion" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>FECHA VENCIMIENTO</label>
+                        <input asp-for="FechaVencimiento" id="fechaVencimiento" class="form-control" required  />
+                <span asp-validation-for="FechaVencimiento" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>COMPLETADA</label>
+                <input asp-for="Completada" id="completada" class="form-control"  />
+            </div>
+            <br />
+            <button class="btn btn-success" type="submit">Guardar</button>
+        </form>
+    </div>
+</div>
+    </div>
+</div>
+<script>
+    function validacionGeneral() {
+        var titulo = document.getElementById("Titulo");
+        var descripcion = document.getElementById("Descripcion");
+        var fechaCreacion = document.getElementById("fechaCreacion");
+        var fechaVencimiento = document.getElementById("fechaVencimiento");
+        var completada = document.getElementById("completada");
+
+        // Validar que los campos se llenen
+        if (titulo.value.trim() === '') {
+            alert("Por favor, ingrese un título.");
+            titulo.focus();
+            return false;
+        }
+
+        if (descripcion.value.trim() === '') {
+            alert("Por favor, ingrese una descripción.");
+            descripcion.focus();
+            return false;
+        }
+
+        if (fechaCreacion.value.trim() === '') {
+            alert("Por favor, ingrese una fecha de creación.");
+            fechaCreacion.focus();
+            return false;
+        }
+
+        if (fechaVencimiento.value.trim() === '') {
+            alert("Por favor, ingrese una fecha de vencimiento.");
+            fechaVencimiento.focus();
+            return false;
+        }
+
+        if (completada.value.trim() === '') {
+            alert("Por favor, ingrese: Si o No en el campo Completada.");
+            completada.focus();
+            return false;
+        }
+
+        var fechaCreacionX = new Date(document.getElementById("fechaCreacion").value);
+        var fechaVencimientoX = new Date(document.getElementById("fechaVencimiento").value);
+
+        if (fechaCreacionX >= fechaVencimientoX) {
+            alert("La fecha de creación debe ser anterior a la fecha de vencimiento.");
+            return false; 
+        }
+
+        alert("La tarea se agrego correctamente.");
+        return true;
+    }
+</script>

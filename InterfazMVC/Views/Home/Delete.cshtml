@@ -1,0 +1,48 @@
+﻿@model Datos.Tarea
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Delete">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label>TITULO</label>
+                <input asp-for="Titulo" class="form-control" />
+                <span asp-validation-for="Titulo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>DESCRIPCION</label>
+                <input asp-for="Descripcion" class="form-control" />
+                <span asp-validation-for="Descripcion" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>FECHA CREACION</label>
+                <input asp-for="FechaCreacion" class="form-control" />
+                <span asp-validation-for="FechaCreacion" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>FECHA VENCIMIENTO</label>
+                <input asp-for="FechaVencimiento" class="form-control" />
+                <span asp-validation-for="FechaVencimiento" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>COMPLETADA</label>
+                <input asp-for="Completada" class="form-control" />
+                <span asp-validation-for="Completada" class="text-danger"></span>
+            </div>
+
+            <button class="btn btn-danger" type="submit">Eliminar</button>
+        </form>
+    </div>
+</div>
+

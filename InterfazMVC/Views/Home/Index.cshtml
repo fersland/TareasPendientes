@@ -1,0 +1,56 @@
+﻿@model IEnumerable<Datos.Tarea>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<a asp-action="Create" asp-controller="Home" class="btn btn-info btn-sm">Crear Nuevo</a>
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card border-0 shadow-lg">
+            <div class="card-body">
+                <table class="table table-hover table-striped display" id="example" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>TITULO</th>
+                            <th>DESCRIPCION</th>
+                            <th>FECHA CREACION</th>
+                            <th>FECHA VENCIMIENTO</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>@item.Titulo</td>
+                                <td>@item.Descripcion</td>
+                                <td>@item.FechaCreacion</td>
+                                <td>@item.FechaVencimiento</td>
+                                <td>
+                                    @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('¿Estás seguro de que deseas eliminar esta tarea?');" })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function confirmarEliminacion(id) {
+        if (confirm('¿Estás seguro de que deseas eliminar esta tarea?')) {
+            window.location.href = '/TareasController/EliminarTarea/' + id;
+        }
+    }
+
+    
+</script>
+
