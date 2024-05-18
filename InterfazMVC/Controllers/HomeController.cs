@@ -119,7 +119,7 @@ namespace InterfazMVC.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            var response = await _httpClient.DeleteAsync($"/api/tareasPendientes/EliminarTarea?id={id}");
+            var response = await _httpClient.DeleteAsync($"/api/tareasPendientes/Eliminar/{id}");
             if(response.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");

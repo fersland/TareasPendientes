@@ -21,6 +21,15 @@ namespace Datos
                 .Property(t => t.Titulo).HasMaxLength(120).IsRequired();
             modelBuilder.Entity<Tarea>()
                 .Property(t => t.Descripcion).HasMaxLength(250).IsRequired();
+
+
+            // USUARIO
+            modelBuilder.Entity<Usuario>()
+                .HasKey(u => u.Id);
+            modelBuilder.Entity<Usuario>()
+                .Property(u => u.UserName).HasMaxLength(120).IsRequired();
+            modelBuilder.Entity<Usuario>()
+                .Property(u => u.Passw).HasMaxLength(500).IsRequired();
         }
     }
 }

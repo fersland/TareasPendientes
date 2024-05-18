@@ -6,6 +6,8 @@ using Datos.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime;
+using System.Threading;
+using System.Xml;
 
 namespace APITareasPendientes.Controllers
 {
@@ -13,11 +15,10 @@ namespace APITareasPendientes.Controllers
     [Route("api/tareasPendientes")]
     public class TareasController : Controller
     {
-        //private readonly Context _dataContext;
         private readonly IMapper _mapper;
-        private readonly ITareaRepository _repository;
+        private readonly IRepository<Tarea> _repository;
 
-        public TareasController(ITareaRepository _rp, IMapper _mp)
+        public TareasController(IRepository<Tarea> _rp, IMapper _mp)
         {
             this._repository = _rp;
             this._mapper = _mp;
@@ -84,49 +85,53 @@ namespace APITareasPendientes.Controllers
             }
             return Ok(tarea);
         }
-        
-        [HttpPut("EditarTarea")]
-        public ActionResult EditarTarea(int id, TareaDTO dto)
+
+
+        // Acción para procesar los datos del formulario de edición
+        [HttpPut("EditarTarea")]    
+        public IActionResult Edit(int id, [FromBody] Tarea entity)
         {
+            if (entity == null)
+            {
+                return BadRequest("La entidad no puede ser nula.");
+            }            
+
+            if (id != entity.Id)
+            {
+                // Registrar los IDs para ver cuál es el problema
+                Console.WriteLine($"ID de la URL: {id}, ID de la entidad: {entity.Id}");
+                return BadRequest("El ID de la URL no coincide con el ID de la entidad.");
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (dto.Titulo.Contains("<script>") || dto.Titulo.Contains("<") || dto.Titulo.Contains(">"))
+            try
             {
-                return BadRequest("El título contiene contenido no permitido.");
+                var response = _repository.GetById(id);
+                if (response == null)
+                {
+                    return NotFound();
+                }
+                _repository.Update(id, entity);
+                return Ok();
             }
-
-            if (dto.Descripcion.Contains("<script>") || dto.Descripcion.Contains("<") || dto.Descripcion.Contains(">"))
+            catch (Exception ex)
             {
-                return BadRequest("La descripcion contiene contenido no permitido.");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error al actualizar la entidad: {ex.Message}");
             }
-
-            if (dto.Completada.Contains("<script>") || dto.Completada.Contains("<") || dto.Completada.Contains(">"))
-            {
-                return BadRequest("El campo completado contiene contenido no permitido.");
-            }
-
-            var response = _mapper.Map<Tarea>(dto);
-            response.Id = id;
-            _repository.Update(id, response);
-            return Ok();
         }
 
-
-        [HttpDelete("EliminarTarea")]
-        public ActionResult EliminarTarea(int id)
+        [HttpDelete]
+        [Route("Eliminar/{id}")]
+        public IActionResult Delete(int id)
         {
-            if(id <= 0) {
-                return BadRequest("No se encontró una ID valida.");
-            }
-
-            var tareaEncontrada = _repository.GetById(id);
-
-            if(tareaEncontrada == null)
+            var entity = _repository.GetById(id);
+            if (entity == null)
             {
-                return NotFound("No se encontró la tarea con la ID especificada");
+                return NotFound();
             }
 
             _repository.Delete(id);

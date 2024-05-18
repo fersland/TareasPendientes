@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Datos.Repository
 {
-    public interface ITareaRepository
+    public interface IRepository<T> where T : class
     {
-        IEnumerable<Tarea> GetAll();
-        Tarea GetById(int id);
-        void Insert(Tarea tarea);
-        void Update(int id, Tarea tarea);
+        IEnumerable<T> GetAll();
+        T GetById(int id);
+        void Insert(T entity);
+        void Update(int id, T entity);
         void Delete(int id);
     }
 }
