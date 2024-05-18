@@ -9,3 +9,6 @@ En las propiedades de la solucion se debera tener 2 proyectos en ejecucion multi
 Los proyectos son:
 1. APITareasPendientes
 2. InterfazMVC
+
+Mejoras:
+Implementando el patrón repositorio para la API
