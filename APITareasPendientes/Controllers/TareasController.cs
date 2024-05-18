@@ -2,8 +2,10 @@
 using AutoMapper.Configuration.Conventions;
 using Datos;
 using Datos.DTO;
+using Datos.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime;
 
 namespace APITareasPendientes.Controllers
 {
@@ -11,26 +13,36 @@ namespace APITareasPendientes.Controllers
     [Route("api/tareasPendientes")]
     public class TareasController : Controller
     {
-        private readonly Context _dataContext;
+        //private readonly Context _dataContext;
         private readonly IMapper _mapper;
+        private readonly ITareaRepository _repository;
 
-        public TareasController(Context _db, IMapper _mp)
+        public TareasController(ITareaRepository _rp, IMapper _mp)
         {
-            this._dataContext = _db;
+            this._repository = _rp;
             this._mapper = _mp;
         }
 
         [HttpGet]
         [Route("ListarTareas")]
-        public async Task<ActionResult> ListarTareas()
+        public ActionResult<IEnumerable<Tarea>> ListarTareas()
         {
-            var response = await _dataContext.Tareas.ToListAsync();
-            return Ok(response);
-        }
+            IEnumerable<Tarea> tareas;
+            try
+            {
+                tareas = _repository.GetAll();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
 
+            return Ok(tareas);
+        }
+                
         [HttpPost]
         [Route("GuardarTareas")]
-        public async Task<ActionResult> GuardarTarea(TareaDTO dto)
+        public ActionResult GuardarTarea(TareaDTO dto)
         {
             if (!ModelState.IsValid)
             {
@@ -54,20 +66,27 @@ namespace APITareasPendientes.Controllers
 
             var tarea = _mapper.Map<Tarea>(dto);
 
-            _dataContext.Add(tarea);
-            await _dataContext.SaveChangesAsync();
+            _repository.Insert(tarea);
             return Ok();
-        }
+        }        
 
         [HttpGet("VerTarea")]
-        public async Task<ActionResult> VerTarea(int id)
+        public ActionResult VerTarea(int id)
         {
-            var response = await _dataContext.Tareas.Where(t => t.Id == id).ToListAsync();
-            return Ok(response);
+            Tarea tarea = new Tarea();
+            try
+            {
+                tarea = _repository.GetById(id);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Ok(tarea);
         }
-
+        
         [HttpPut("EditarTarea")]
-        public async Task<IActionResult> EditarTarea(int id, TareaDTO dto)
+        public ActionResult EditarTarea(int id, TareaDTO dto)
         {
             if (!ModelState.IsValid)
             {
@@ -91,23 +110,28 @@ namespace APITareasPendientes.Controllers
 
             var response = _mapper.Map<Tarea>(dto);
             response.Id = id;
-            _dataContext.Update(response);
-            await _dataContext.SaveChangesAsync();
-
-            return Ok(await _dataContext.Tareas.ToListAsync());
-        }
-
-        [HttpDelete("EliminarTarea")]
-        public async Task<IActionResult> EliminarTarea(int id)
-        {
-            var entityToDelete = await _dataContext.Tareas.FindAsync(id);
-            if (entityToDelete != null)
-            {
-                _dataContext.Tareas.Remove(entityToDelete);
-                await _dataContext.SaveChangesAsync();
-            }
-
+            _repository.Update(id, response);
             return Ok();
         }
+
+
+        [HttpDelete("EliminarTarea")]
+        public ActionResult EliminarTarea(int id)
+        {
+            if(id <= 0) {
+                return BadRequest("No se encontró una ID valida.");
+            }
+
+            var tareaEncontrada = _repository.GetById(id);
+
+            if(tareaEncontrada == null)
+            {
+                return NotFound("No se encontró la tarea con la ID especificada");
+            }
+
+            _repository.Delete(id);
+            return Ok();
+        }
+
     }
 }

@@ -1,0 +1,29 @@
+﻿@model Datos.Tarea
+
+<a asp-action="Index" asp-controller="Home" class="btn btn-outline-primary btn-sm"><i class="fas fa-reload"></i> Volver</a>
+<div class="row mt-4">
+    <h3>Detalle de Tarea</h3>
+    <div class="col-md-6"><hr />
+        <div class="card border-0 shadow-lg">
+            <div class="card-body">
+                <dl class="dl-horizontal">
+                    <dt>TITULO</dt>                            
+                    <dd>@Html.DisplayFor(model => model.Titulo)</dd>
+
+                    <dt>DESCRIPCION</dt>
+                    <dd>@Html.DisplayFor(model => model.Descripcion)</dd>                    
+
+                    <dt>FECHA CREACION</dt>
+                    <dd>@Html.DisplayFor(model => model.FechaCreacion)</dd>                    
+
+                    <dt>FECHA VENCIMIENTO</dt>
+                    <dd>@Html.DisplayFor(model => model.FechaVencimiento)</dd>                    
+
+                    <dt>COMPLETADA</dt>
+                    <dd>@Html.DisplayFor(model => model.FechaVencimiento)</dd>
+                </dl>
+
+            </div>
+        </div>
+    </div>
+</div>

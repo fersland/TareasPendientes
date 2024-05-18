@@ -5,9 +5,10 @@
 *@
 @{
 }
-<a asp-action="Index" asp-controller="Home" class="btn btn-primary btn-sm">Volver</a>
+<a asp-action="Index" asp-controller="Home" class="btn btn-outline-primary btn-sm"><i class="fas fa-reload"></i> Volver</a>
 <div class="row mt-4">
-    <div class="col-md-12">
+    <h3><i class="fas fa-edit"></i> Editar Tarea</h3>
+    <div class="col-md-6">
         <div class="card border-0 shadow-lg">
             <div class="card-body">
                 <form asp-action="Edit" onsubmit="return validacionGeneral()">
@@ -43,7 +44,7 @@
                 <span asp-validation-for="Completada" class="text-danger"></span>
             </div>
             <br />
-            <button class="btn btn-warning" type="submit">Editar</button>
+            <button class="btn btn-outline-warning" type="submit"><i class="fas fa-edit"></i> Editar</button>
         </form>
     </div>
 </div>

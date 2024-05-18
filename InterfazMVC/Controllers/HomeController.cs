@@ -69,12 +69,26 @@ namespace InterfazMVC.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-
                 var content = await response.Content.ReadAsStringAsync();
-                //var tarea = JsonConvert.DeserializeObject<Tarea>(content);
-                var tarea = JsonConvert.DeserializeObject<List<Tarea>>(content).FirstOrDefault();
+                var tarea = JsonConvert.DeserializeObject<Tarea>(content);
                 return View(tarea);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+        }
 
+        [HttpGet]
+        public async Task<IActionResult> View(int id)
+        {
+            var response = await _httpClient.GetAsync($"/api/tareasPendientes/VerTarea?id={id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var tarea = JsonConvert.DeserializeObject<Tarea>(content);
+                return View(tarea);
             }
             else
             {
@@ -102,7 +116,6 @@ namespace InterfazMVC.Controllers
             }
             return View(dto);
         }
-
 
         public async Task<IActionResult> Delete(int id)
         {

@@ -1,11 +1,12 @@
 ﻿@model IEnumerable<Datos.Tarea>
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Inicio";
 }
 
 
-<a asp-action="Create" asp-controller="Home" class="btn btn-info btn-sm">Crear Nuevo</a>
+<a asp-action="Create" asp-controller="Home" class="btn btn-outline-info btn-sm"><i class="fas fa-check"></i> Crear Nuevo</a>
 <div class="row mt-4">
+    <h3><i class="fas fa-list"></i> Listado de Tareas</h3>
     <div class="col-md-12">
         <div class="card border-0 shadow-lg">
             <div class="card-body">
@@ -31,8 +32,9 @@
                                 <td>@item.FechaCreacion</td>
                                 <td>@item.FechaVencimiento</td>
                                 <td>
-                                    @Html.ActionLink("Edit", "Edit", new { id = item.Id })
-                                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('¿Estás seguro de que deseas eliminar esta tarea?');" })
+                                    <a asp-controller="Home" asp-action="View" asp-route-id="@item.Id"><i class="fas fa-eye"></i></a>
+                                    <a asp-controller="Home" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>
+                                    <a asp-controller="Home" asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('¿Estás seguro de que deseas eliminar esta tarea?');"><i class="fas fa-trash"></i></a>
                                 </td>
                             </tr>
                         }
@@ -49,8 +51,6 @@
         if (confirm('¿Estás seguro de que deseas eliminar esta tarea?')) {
             window.location.href = '/TareasController/EliminarTarea/' + id;
         }
-    }
-
-    
+    }    
 </script>
 

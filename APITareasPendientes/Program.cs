@@ -1,4 +1,5 @@
 using Datos;
+using Datos.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<Context>(options => options.UseSqlServer("name=dbAdmin"));
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddScoped<ITareaRepository, TareaRepository>();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
